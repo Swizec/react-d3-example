@@ -2,38 +2,37 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  // or devtool: 'eval' to debug issues with compiled output:
   devtool: 'cheap-module-eval-source-map',
   entry: [
-    // necessary for hot reloading with IE:
-    'eventsource-polyfill',
-    // listen to code updates emitted by hot middleware:
+    'eventsource-polyfill', // necessary for hot reloading with IE
     'webpack-hot-middleware/client',
-    // your code:
     './src/index'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: '/dist/'
+    publicPath: '/static/'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
+  // require('./code') vs. require('./code.jsx');
+  // import foo from './code';
   resolve: {
-    extensions: ['', '.js', '.jsx']
+      extensions: ['', '.js', '.jsx']
   },
   module: {
     loaders: [{
-      test: /\.js|\.jsx$/,
+      test: /\.js|\.jsx?/,
       loaders: ['babel'],
       include: path.join(__dirname, 'src')
     },
     {
-      test: /\.less$/,
-      loader: "style!css!less"
-    }
-    ]
+        test: /\.less$/,
+        loader: "style!css!less"
+    }]
+      // require('style.less')
+      // --> <link ...
   }
 };
